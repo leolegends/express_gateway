@@ -5,11 +5,16 @@ admin:
   hostname: localhost
 apiEndpoints:
   api:
-    host: localhost
-    paths: '/ip'
+   host: localhost
+   path: /ip
+  service:
+   host: localhost
+   path: /clientes
 serviceEndpoints:
-  httpbin:
+  api:
     url: 'https://httpbin.org'
+  service:
+    url: 'http://localhost:81/public/'  
 policies:
   - basic-auth
   - cors
@@ -20,7 +25,7 @@ policies:
   - proxy
   - rate-limit
 pipelines:
-  default:
+  api_service:
     apiEndpoints:
       - api
     policies:
@@ -28,5 +33,16 @@ pipelines:
       - key-auth:
       - proxy:
           - action:
-              serviceEndpoint: httpbin 
+              serviceEndpoint: api
+              changeOrigin: true
+
+  service:
+    apiEndpoints:
+      - service
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: service
               changeOrigin: true

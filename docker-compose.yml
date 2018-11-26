@@ -4,7 +4,7 @@ services:
     container_name: "redis_express_gateway"
     image: 'bitnami/redis'
     ports:
-      - '6379:6379'
+      - '6380:6379'
     volumes:
       - ./redis/:/bitnami/redis/data
     restart: always
